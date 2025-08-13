@@ -1,8 +1,8 @@
 {
-  "name": "chrome-samesite-cookie",
-  "displayName": "Chrome samesite cookie",
+  "name": "dev-cookie-sync",
+  "displayName": "Dev Cookie Sync",
   "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "description": "将线上 Cookie 同步到本地",
   "author": "yx1aoq1",
   "scripts": {
     "dev": "plasmo dev",
@@ -10,6 +10,8 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/storage": "^1.15.0",
+    "antd": "^5.27.0",
     "plasmo": "0.90.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -24,8 +26,16 @@
     "typescript": "5.3.3"
   },
   "manifest": {
+    "permissions": [
+      "cookies",
+      "storage"
+    ],
     "host_permissions": [
-      "https://*/*"
-    ]
+      "https://*/*",
+      "http://*/*"
+    ],
+    "background": {
+      "service_worker": "background.ts"
+    }
   }
 }
