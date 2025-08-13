@@ -17,18 +17,22 @@ const syncCookie = (cookies: chrome.cookies.Cookie, target: string) => {
   })
 }
 
-// 监听线上 Cookie 变化
-chrome.cookies.onChanged.addListener(async (change) => {
-  // 获取配置
-  const config = await storage.get<DevCookieSyncConfig>("devCookieSyncConfig")
+const init = async () => {
+  // 监听线上 Cookie 变化
+  chrome.cookies.onChanged.addListener(async (change) => {
+    // 获取配置
+    const config = await storage.get<DevCookieSyncConfig>("devCookieSyncConfig")
 
-  if (!change.cookie || !config.enable) return
+    if (!change.cookie || !config?.enable) return
 
-  config.domains.map(({ source, target }) => {
-    const sourceDomain = source.replace(/^https?:\/\//, "")
+    config?.domains.map(({ source, target }) => {
+      const sourceDomain = source.replace(/^https?:\/\//, "")
 
-    if (change.cookie.domain === sourceDomain) {
-      syncCookie(change.cookie, target)
-    }
+      if (change.cookie.domain === sourceDomain) {
+        syncCookie(change.cookie, target)
+      }
+    })
   })
-})
+}
+
+init()
