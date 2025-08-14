@@ -13,19 +13,17 @@ const { TextArea } = Input
 
 const parseMappingText = (text: string) => {
   if (!text) return []
-  return text.split("\n").map((line) => {
+  return text.split("\n").reduce((acc, line) => {
     const [source, target] = line.split(" ")
-    return { source, target }
-  })
+    if (!source || !target) return acc
+    acc.push({ source, target })
+    return acc
+  }, [])
 }
 
 const formatMappingText = (domains: DevCookieSyncConfig["domains"]) => {
-  return domains
-    .map((domain) => {
-      if (!domain.source || !domain.target) return ""
-      return `${domain.source} ${domain.target}`
-    })
-    .join("\n")
+  if (!domains.length) return ""
+  return domains.map((domain) => `${domain.source} ${domain.target}`).join("\n")
 }
 
 function Popup() {
